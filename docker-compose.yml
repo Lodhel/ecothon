@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+
+    fast_api_mvp:
+        build: ""
+        command: uvicorn backend.run:application --host 0.0.0.0 --port 2309 --reload --timeout-keep-alive 1000
+        volumes:
+            - .:/backend/app
+        env_file:
+            - backend/.env
+        logging:
+          options:
+            max-size: 10m
+        deploy:
+          resources:
+            reservations:
+              memory: 20M
+        depends_on:
+          - db_mvp
+        ports:
+            - 2309:2309
+
+    db_mvp:
+        restart: always
+        image: postgres:15.3
+        container_name: db_mvp
+        env_file:
+            - backend/.env
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        ports:
+            - 8585:8080
+        logging:
+          driver: none
+
+    mvp_adminer_db:
+        container_name: mvp_adminer_db
+        image: adminer
+        restart: always
+        depends_on:
+            - db_mvp
+        ports:
+            - 8115:8080
+        logging:
+          driver: none
+
+volumes:
+    postgres_data:
