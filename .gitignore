@@ -2,7 +2,7 @@ env/
 venv/
 .venv
 .vscode
-../.idea/
+.idea/
 .htpasswd
 __pycache__/
 flower
