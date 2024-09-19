@@ -1,4 +1,5 @@
 [Видеодемонстрация](https://drive.google.com/file/d/1ZyCr25LRca4o43aZA8L8HZyxvsFHUfSJ/view?usp=sharing)
+
 Цель разработки - приложение, дающее возможность:
 * авторизоваться;
 * получить доступ к карте насаждений;
