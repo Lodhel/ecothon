@@ -1,4 +1,4 @@
-[Видеодемонстрация](https://drive.google.com/file/d/1ZyCr25LRca4o43aZA8L8HZyxvsFHUfSJ/view?usp=sharing)
+[Видеодемонстрация](https://drive.google.com/file/d/1-Ukw-f5twiDZvCNGaeC9_opkHPpScycM/view?usp=sharing)
 
 Цель разработки - приложение, дающее возможность:
 * авторизоваться;
