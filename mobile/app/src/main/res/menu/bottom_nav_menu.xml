@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:title="Главная"
+        android:icon="@drawable/home_selector"
+        android:iconTintMode="multiply"/>
+    <item
+        android:id="@+id/analytics"
+        android:title="Аналитика"
+        android:icon="@drawable/analytics_selector"
+        android:iconTintMode="multiply"/>
+    <item
+        android:id="@+id/map"
+        android:title="Карта"
+        android:icon="@drawable/map_selector"
+        android:iconTintMode="multiply"/>
+    <item
+        android:id="@+id/scan"
+        android:title="Сканер"
+        android:icon="@drawable/scan_selector"
+        android:iconTintMode="multiply"/>
+
+    <item
+        android:id="@+id/profile"
+        android:title="Профиль"
+        android:icon="@drawable/profile_selector"
+        android:iconTintMode="multiply"/>
+</menu>

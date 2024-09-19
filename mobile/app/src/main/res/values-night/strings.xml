@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="birch_description">Берёза широко распространена в Северном полушарии; на территории России принадлежит к числу наиболее распространенных древесных пород</string>
+    <string name="age">Возраст: %s</string>
+    <string name="state">Состояние: %s</string>
+</resources>

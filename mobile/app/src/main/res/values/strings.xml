@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">MGC</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="birch">БЕРЕЗА</string>
+    <string name="birch_description">Берёза широко распространена в Северном полушарии; на территории России принадлежит к числу наиболее распространенных древесных пород</string>
+    <string name="age">Возраст: %s</string>
+    <string name="state">Состояние: %s</string>
+
+    <string-array name="states">
+        <item>хорошее</item>
+        <item>удовлетворительное</item>
+        <item>плохое</item>
+    </string-array>
+</resources>
