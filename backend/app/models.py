@@ -8,6 +8,22 @@ import enum
 Base = declarative_base()
 
 
+class GreenPlantRecord(Base):
+    __tablename__ = 'green_plant_records'
+
+    id = Column(Integer, primary_key=True)
+    row_number = Column(String(10))
+    name = Column(String(100))
+    tree_count = Column(Integer)
+    shrub_count = Column(Integer)
+    width = Column(String(50))
+    height = Column(String(50))
+    condition_description = Column(String(255))
+    checked = Column(Boolean, default=False)
+    last_checked = Column(DateTime, default=None, nullable=True)
+    contributor = Column(String(255))
+
+
 class UserProfile(Base):
     __tablename__ = 'user_profile'
     id = Column(Integer, primary_key=True)
