@@ -104,8 +104,9 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
     )
     async def post(self, image: UploadFile = File(...)):
         results: list = []
+        file_content = await image.read()
         client_process_image = self.client_process_image()
-        async for data_tree in client_process_image.make_generator_tree_data_by_image(image):
+        async for data_tree in client_process_image.make_generator_tree_data_by_image(file_content):
             # {'x_point': 55.5, 'y_point': 250.0, 'width': 103.0, 'height': 56.0, 'confidence': 0.6297429800033569, 'tree_type': 'Ель'}
             results.append(data_tree)
             GreenPlantRecordModel(
