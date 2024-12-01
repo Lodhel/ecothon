@@ -1,3 +1,5 @@
+import datetime
+
 from inference_sdk import InferenceHTTPClient
 
 from backend.app.config import roboflow_key
@@ -22,6 +24,7 @@ class ClientProcessingImage:
 
     async def make_generator_tree_data_by_image(self, image):
         result = self.CLIENT.infer(image, model_id="tree-dataset-2023/8")
+        now_data = datetime.date.today()
         for number, data_tree in enumerate(result['predictions']):
             yield {
                 'x_point': data_tree['x'],
@@ -30,5 +33,5 @@ class ClientProcessingImage:
                 'height': data_tree['height'],
                 'confidence': data_tree['confidence'],
                 'tree_type': self.mapping.get(data_tree['class'], 'растение не распознано'),
-                'class_id': f'{number}-{data_tree["class_id"]}',
+                'class_id': f'{now_data.year}-{now_data.month}-{now_data.day}-{number}-{data_tree["class_id"]}',
             }
