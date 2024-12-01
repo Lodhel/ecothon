@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean, Enum, DateTime
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean, Enum, DateTime, ARRAY
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship, declarative_base
-from sqlalchemy.dialects.postgresql import ARRAY
 from datetime import datetime
 import enum
 
@@ -12,7 +12,7 @@ class GreenPlantFiles(Base):
     __tablename__ = 'green_plant_files'
 
     id = Column(Integer, primary_key=True)
-    data = Column(ARRAY(Float))
+    data = Column(JSONB)
     file_path = Column(String(255))
 
     green_plant_record = relationship("GreenPlantRecord", back_populates="files")
