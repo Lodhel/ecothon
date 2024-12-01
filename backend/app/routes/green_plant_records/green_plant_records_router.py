@@ -15,6 +15,7 @@ from sqlalchemy import select
 from backend.app.models import GreenPlantRecord, GreenPlantFiles
 from backend.app.orm_sender.manager_sqlalchemy import ManagerSQLAlchemy
 from backend.app.process_image import ClientProcessingImage
+from backend.app.routes.green_plant_records.create_xlsx import ManagerXLSX
 from backend.app.routes.green_plant_records.models import GreenPlantResponseModel, GreenPlantRecordModel
 from backend.app.routes.main import MainRouterMIXIN
 
@@ -29,13 +30,14 @@ green_plant_records_tags = ["green_plant_records_router"]
 @cbv(green_plant_records_router)
 class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
     client_process_image = ClientProcessingImage
+    manager_xlsx = ManagerXLSX
 
     @green_plant_records_router.get(
         "/records/",
         name="get_green_plant_records",
         response_model=GreenPlantResponseModel,
         description="Выгрузка перечетной ведомости в формате JSON или XLSX",
-        tags=["Green Plant Records"],
+        tags=green_plant_records_tags,
     )
     async def get(
         self,
@@ -72,25 +74,19 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                 )
 
             elif response_format == "xlsx":
-                wb = Workbook()
-                ws = wb.active
-                ws.title = "Filtered Data"
-                headers = [
-                    "№ п/п", "Наименование пород", "Кол-во в шт.", "Диаметр, Р, см",
-                    "Высота, м", "Характеристика состояния зеленых насаждений",
+                data = [
+                    [
+                        record.row_number,
+                        record.name,
+                        f"{record.tree_count or 0} / {record.shrub_count or 0}",
+                        record.width,
+                        record.height,
+                        record.condition_description,
+                    ]
+                    for record in records
                 ]
-                ws.append(headers)
-                for record in records:
-                    ws.append(
-                        [
-                            record.row_number,
-                            record.name,
-                            f"{record.tree_count or 0} / {record.shrub_count or 0}",
-                            record.width,
-                            record.height,
-                            record.condition_description,
-                        ]
-                    )
+                wb: Workbook = self.manager_xlsx().create(data)
+
                 file_stream = BytesIO()
                 wb.save(file_stream)
                 file_stream.seek(0)
