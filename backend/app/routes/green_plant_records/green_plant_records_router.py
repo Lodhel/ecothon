@@ -1,3 +1,4 @@
+import datetime
 import json
 import tempfile
 from typing import Optional
@@ -90,10 +91,13 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                 file_stream = BytesIO()
                 wb.save(file_stream)
                 file_stream.seek(0)
+                file_name: str = f'ПЕРЕЧЕТНАЯ_ВЕДОМОСТЬ_{datetime.date.today().month}-{datetime.date.today().year}'
                 return StreamingResponse(
                     file_stream,
                     media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    headers={"Content-Disposition": "attachment; filename=filtered_data.xlsx"},
+                    headers={
+                        "Content-Disposition": f"attachment; filename={file_name}.xlsx"
+                    },
                 )
 
     @green_plant_records_router.post(
