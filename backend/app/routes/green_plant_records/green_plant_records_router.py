@@ -116,7 +116,6 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
         async with AsyncSession(self.engine, autoflush=False, expire_on_commit=False) as session:
             async for data_tree in client_process_image.make_generator_tree_data_by_image(temp_file_path):
                 is_shrub = data_tree['tree_type'].lower() == 'куст'
-                results.append(data_tree)
 
                 existing_record = await session.execute(
                     select(GreenPlantRecord).where(
@@ -132,7 +131,7 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                     else:
                         existing_record.tree_count += 1
                 else:
-                    green_plant_records = GreenPlantRecord(
+                    green_plant_record = GreenPlantRecord(
                         row_number=data_tree['class_id'],
                         name=data_tree['tree_type'],
                         tree_count=1 if not is_shrub else 0,
@@ -141,7 +140,9 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                         height=str(data_tree['height']),
                         condition_description='удовлетворит.',
                     )
-                    session.add(green_plant_records)
+                    session.add(green_plant_record)
+                    session.flush()
+                    results.append(data_tree | {'green_plant_record_id': green_plant_record.id})
 
             if results:
                 green_plant_files = GreenPlantFiles(
@@ -163,7 +164,7 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
     )
     async def edit(
         self,
-        row_number: int = Form(...),
+        row_number: str = Form(...),
         name: str = Form(...),
         tree_count: int = Form(...),
         shrub_count: int = Form(...),
