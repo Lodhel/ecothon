@@ -202,9 +202,6 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
             'shrub_count': shrub_count,
             'width': width,
             'height': height,
-            'condition_description': condition_description,
-            'checked': True,
-            'last_checked': existing_record.last_checked,
-            'contributor': contributor
+            'condition_description': condition_description
         }
         return self.get_data(data)
