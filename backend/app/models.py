@@ -23,6 +23,9 @@ class GreenPlantRecord(Base):
     last_checked = Column(DateTime, default=None, nullable=True)
     contributor = Column(String(255))
 
+    data = Column(ARRAY)
+    file_path = Column(String(255))
+
 
 class UserProfile(Base):
     __tablename__ = 'user_profile'

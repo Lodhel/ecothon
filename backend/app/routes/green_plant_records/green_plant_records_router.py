@@ -109,20 +109,36 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
             temp_file_path = temp_file.name
 
         client_process_image = self.client_process_image()
-        async for data_tree in client_process_image.make_generator_tree_data_by_image(temp_file_path):
-            results.append(data_tree)
-            logger.info(data_tree)
-            GreenPlantRecordModel(
-                **{
-                    'row_number': data_tree['class_id'],
-                    'name': data_tree['tree_type'],
-                    'tree_count': 1,
-                    'shrub_count': 1,
-                    'width': data_tree['width'],
-                    'height': data_tree['height'],
-                    'condition_description': 'удовлетворит.'
-                }
-            )
+        async with AsyncSession(self.engine, autoflush=False, expire_on_commit=False) as session:
+            async for data_tree in client_process_image.make_generator_tree_data_by_image(temp_file_path):
+                is_shrub = data_tree['tree_type'].lower() == 'куст'
+
+                existing_record = await session.execute(
+                    select(GreenPlantRecord).where(
+                        GreenPlantRecord.row_number == data_tree['row_number'],
+                        GreenPlantRecord.name == data_tree['tree_type']
+                    )
+                )
+                existing_record = existing_record.scalars().first()
+
+                if existing_record:
+                    if is_shrub:
+                        existing_record.shrub_count += 1
+                    else:
+                        existing_record.tree_count += 1
+                else:
+                    green_plant_records = GreenPlantRecord(
+                        row_number=data_tree['class_id'],
+                        name=data_tree['tree_type'],
+                        tree_count=1 if not is_shrub else 0,
+                        shrub_count=1 if is_shrub else 0,
+                        width=data_tree['width'],
+                        height=data_tree['height'],
+                        condition_description='удовлетворит.'
+                    )
+                    session.add(green_plant_records)
+
+            await session.commit()
 
         data = self.get_data(results)
         return data
