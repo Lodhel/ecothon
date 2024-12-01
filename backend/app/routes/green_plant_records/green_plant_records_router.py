@@ -96,7 +96,7 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                     file_stream,
                     media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     headers={
-                        "Content-Disposition": f"attachment; filename={file_name}.xlsx"
+                        "Content-Disposition": f"attachment; filename*=utf-8''{file_name}.xlsx"
                     },
                 )
 
