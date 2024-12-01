@@ -3,6 +3,7 @@ import tempfile
 from fastapi import Depends, UploadFile, File
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
+from loguru import logger
 from starlette.requests import Request
 from starlette.responses import Response, StreamingResponse
 
@@ -114,6 +115,7 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
         async for data_tree in client_process_image.make_generator_tree_data_by_image(temp_file_path):
             # {'x_point': 55.5, 'y_point': 250.0, 'width': 103.0, 'height': 56.0, 'confidence': 0.6297429800033569, 'tree_type': 'Ель'}
             results.append(data_tree)
+            logger.info(data_tree)
             GreenPlantRecordModel(
                 **{
                     'row_number': data_tree['class_id'],
