@@ -137,8 +137,8 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                         name=data_tree['tree_type'],
                         tree_count=1 if not is_shrub else 0,
                         shrub_count=1 if is_shrub else 0,
-                        width=data_tree['width'],
-                        height=data_tree['height'],
+                        width=str(data_tree['width']),
+                        height=str(data_tree['height']),
                         condition_description='удовлетворит.',
                     )
                     session.add(green_plant_records)
