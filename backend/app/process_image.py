@@ -28,4 +28,5 @@ class ClientProcessingImage:
                 'height': data_tree['height'],
                 'confidence': data_tree['confidence'],
                 'tree_type': self.mapping.get(data_tree['class'], 'растение не распознано'),
+                'class_id': data_tree['class_id'],
             }
