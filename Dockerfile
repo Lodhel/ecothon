@@ -1,6 +1,14 @@
 FROM python:3.11-alpine
 
-RUN apk add --no-cache tzdata
+RUN apk add --no-cache \
+    build-base \
+    libjpeg-turbo-dev \
+    zlib-dev \
+    libpng-dev \
+    freetype-dev \
+    lcms2-dev \
+    openblas-dev \
+    libmagic-dev
 ENV TZ Europe/Moscow
 
 WORKDIR /backend/app
