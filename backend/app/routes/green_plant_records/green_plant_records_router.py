@@ -91,12 +91,12 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                 file_stream = BytesIO()
                 wb.save(file_stream)
                 file_stream.seek(0)
-                file_name: str = f'ПЕРЕЧЕТНАЯ_ВЕДОМОСТЬ_{datetime.date.today().month}-{datetime.date.today().year}'
+                file_name: str = f'vedomost_{datetime.date.today().month}-{datetime.date.today().year}'
                 return StreamingResponse(
                     file_stream,
                     media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     headers={
-                        "Content-Disposition": f"attachment; filename*=utf-8''{file_name}.xlsx"
+                        "Content-Disposition": f"attachment; filename={file_name}.xlsx"
                     },
                 )
 
