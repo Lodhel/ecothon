@@ -118,7 +118,7 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
 
                 existing_record = await session.execute(
                     select(GreenPlantRecord).where(
-                        GreenPlantRecord.row_number == data_tree['row_number'],
+                        GreenPlantRecord.row_number == data_tree['class_id'],
                         GreenPlantRecord.name == data_tree['tree_type']
                     )
                 )

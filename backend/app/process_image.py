@@ -22,7 +22,7 @@ class ClientProcessingImage:
 
     async def make_generator_tree_data_by_image(self, image):
         result = self.CLIENT.infer(image, model_id="tree-dataset-2023/8")
-        for data_tree in result['predictions']:
+        for number, data_tree in enumerate(result['predictions']):
             yield {
                 'x_point': data_tree['x'],
                 'y_point': data_tree['y'],
@@ -30,5 +30,5 @@ class ClientProcessingImage:
                 'height': data_tree['height'],
                 'confidence': data_tree['confidence'],
                 'tree_type': self.mapping.get(data_tree['class'], 'растение не распознано'),
-                'class_id': data_tree['class_id'],
+                'class_id': f'{number}-{data_tree["class_id"]}',
             }
