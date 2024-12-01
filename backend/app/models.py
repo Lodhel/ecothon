@@ -15,8 +15,6 @@ class GreenPlantFiles(Base):
     data = Column(JSONB)
     file_path = Column(String(255))
 
-    green_plant_record = relationship("GreenPlantRecord", back_populates="files")
-
 
 class GreenPlantRecord(Base):
     __tablename__ = 'green_plant_records'
