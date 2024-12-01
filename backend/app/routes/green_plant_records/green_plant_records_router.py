@@ -11,7 +11,7 @@ from starlette.responses import Response, StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from backend.app.models import GreenPlantRecord
+from backend.app.models import GreenPlantRecord, GreenPlantFiles
 from backend.app.orm_sender.manager_sqlalchemy import ManagerSQLAlchemy
 from backend.app.process_image import ClientProcessingImage
 from backend.app.routes.green_plant_records.models import GreenPlantResponseModel, GreenPlantRecordModel
@@ -39,6 +39,7 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
     async def get(
         self,
         request: Request,
+        green_plant_record_id: int = Query(None, description="id объекта"),
         response_format: str = Query("json", enum=["json", "xlsx"], description="Формат ответа"),
         name_filter: Optional[str] = Query(None, description="Фильтр по наименованию пород"),
     ):
@@ -46,6 +47,8 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
             query = select(GreenPlantRecord)
             if name_filter:
                 query = query.where(GreenPlantRecord.name == name_filter)
+            if green_plant_record_id:
+                query = query.where(GreenPlantRecord.id == green_plant_record_id)
 
             result = await session.execute(query)
             records = result.scalars().all()
@@ -134,9 +137,15 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                         shrub_count=1 if is_shrub else 0,
                         width=data_tree['width'],
                         height=data_tree['height'],
-                        condition_description='удовлетворит.'
+                        condition_description='удовлетворит.',
                     )
                     session.add(green_plant_records)
+
+            green_plant_files = GreenPlantFiles(
+                data=results,
+                file_path=temp_file_path
+            )
+            session.add(green_plant_files)
 
             await session.commit()
 

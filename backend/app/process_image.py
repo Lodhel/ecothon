@@ -1,10 +1,12 @@
 from inference_sdk import InferenceHTTPClient
 
+from backend.app.config import roboflow_key
+
 
 class ClientProcessingImage:
     CLIENT = InferenceHTTPClient(
         api_url="https://detect.roboflow.com",
-        api_key="1nned9R042vZm3Lgm2vH"
+        api_key=roboflow_key
     )
 
     mapping = {

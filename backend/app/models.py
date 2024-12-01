@@ -8,6 +8,16 @@ import enum
 Base = declarative_base()
 
 
+class GreenPlantFiles(Base):
+    __tablename__ = 'green_plant_files'
+
+    id = Column(Integer, primary_key=True)
+    data = Column(ARRAY(Float))
+    file_path = Column(String(255))
+
+    green_plant_record = relationship("GreenPlantRecord", back_populates="files")
+
+
 class GreenPlantRecord(Base):
     __tablename__ = 'green_plant_records'
 
