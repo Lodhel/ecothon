@@ -1,5 +1,6 @@
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Side, Font
+from openpyxl.styles import PatternFill
 
 
 class ManagerXLSX:
@@ -18,7 +19,9 @@ class ManagerXLSX:
         self.set_styles(headers)
         self.add_data(data)
         self.set_width()
+        self.set_height()
         self.configure_data_style_cells(headers)
+        self.set_colors_headers()
 
         return self.wb
 
@@ -50,6 +53,10 @@ class ManagerXLSX:
         for i, width in enumerate(col_widths, start=1):
             self.ws.column_dimensions[chr(64 + i)].width = width
 
+    def set_height(self):
+        self.ws.row_dimensions[1].height = 30
+        self.ws.row_dimensions[2].height = 25
+
     def configure_data_style_cells(self, headers: list):
         for row in self.ws.iter_rows(min_row=3, max_row=self.ws.max_row, min_col=1, max_col=len(headers)):
             for cell in row:
@@ -58,3 +65,9 @@ class ManagerXLSX:
                     left=Side(style='thin'), right=Side(style='thin'),
                     top=Side(style='thin'), bottom=Side(style='thin')
                 )
+
+    def set_colors_headers(self):
+        fill = PatternFill(start_color="ADD8E6", end_color="ADD8E6", fill_type="solid")
+        for row in [1, 2]:
+            for cell in self.ws[row]:
+                cell.fill = fill
