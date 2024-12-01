@@ -141,13 +141,13 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                     )
                     session.add(green_plant_records)
 
+            data = self.get_data(results)
             green_plant_files = GreenPlantFiles(
-                data=results,
+                data=data,
                 file_path=temp_file_path
             )
             session.add(green_plant_files)
 
             await session.commit()
 
-        data = self.get_data(results)
         return data
