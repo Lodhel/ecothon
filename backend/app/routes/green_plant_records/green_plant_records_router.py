@@ -43,11 +43,12 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
         name_filter: Optional[str] = Query(None, description="Фильтр по наименованию пород"),
     ):
         async with AsyncSession(self.engine, autoflush=False, expire_on_commit=False) as session:
-            query = session.query(GreenPlantRecord)
+            query = select(GreenPlantRecord)
             if name_filter:
-                query = query.filter(GreenPlantRecord.name == name_filter)
+                query = query.where(GreenPlantRecord.name == name_filter)
 
-            records = await query.all()
+            result = await session.execute(query)
+            records = result.scalars().all()
 
             if response_format == "json":
                 return GreenPlantResponseModel(
