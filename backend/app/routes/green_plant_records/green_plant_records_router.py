@@ -1,3 +1,5 @@
+import tempfile
+
 from fastapi import Depends, UploadFile, File
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
@@ -104,9 +106,12 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
     )
     async def post(self, image: UploadFile = File(...)):
         results: list = []
-        file_content = await image.read()
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
+            temp_file.write(await image.read())
+            temp_file_path = temp_file.name
+
         client_process_image = self.client_process_image()
-        async for data_tree in client_process_image.make_generator_tree_data_by_image(file_content):
+        async for data_tree in client_process_image.make_generator_tree_data_by_image(temp_file_path):
             # {'x_point': 55.5, 'y_point': 250.0, 'width': 103.0, 'height': 56.0, 'confidence': 0.6297429800033569, 'tree_type': 'Ель'}
             results.append(data_tree)
             GreenPlantRecordModel(
