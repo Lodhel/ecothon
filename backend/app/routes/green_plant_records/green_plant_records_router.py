@@ -156,7 +156,7 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
         return data
 
     @green_plant_records_router.put(
-        "/edit-record/{id}/",
+        "/edit-record/",
         name="edit_record",
         description="Редактирование записи перечетной ведомости по ID",
         tags=green_plant_records_tags,
