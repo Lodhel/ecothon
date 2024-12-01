@@ -20,7 +20,7 @@ class GreenPlantRecord(Base):
     __tablename__ = 'green_plant_records'
 
     id = Column(Integer, primary_key=True)
-    row_number = Column(String(10))
+    row_number = Column(String(100))
     name = Column(String(100))
     tree_count = Column(Integer)
     shrub_count = Column(Integer)
