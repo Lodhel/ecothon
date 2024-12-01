@@ -86,8 +86,8 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                             record.row_number,
                             record.name,
                             f"{record.tree_count or 0} / {record.shrub_count or 0}",
-                            record.diameter_cm,
-                            record.height_m,
+                            record.width,
+                            record.height,
                             record.condition_description,
                         ]
                     )
