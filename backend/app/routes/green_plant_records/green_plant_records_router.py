@@ -1,3 +1,4 @@
+import json
 import tempfile
 from typing import Optional
 
@@ -115,6 +116,7 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
         async with AsyncSession(self.engine, autoflush=False, expire_on_commit=False) as session:
             async for data_tree in client_process_image.make_generator_tree_data_by_image(temp_file_path):
                 is_shrub = data_tree['tree_type'].lower() == 'куст'
+                results.append(data_tree)
 
                 existing_record = await session.execute(
                     select(GreenPlantRecord).where(
@@ -142,7 +144,7 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                     session.add(green_plant_records)
 
             green_plant_files = GreenPlantFiles(
-                data={'data': results},
+                data=json.dumps(results),
                 file_path=temp_file_path
             )
             session.add(green_plant_files)
