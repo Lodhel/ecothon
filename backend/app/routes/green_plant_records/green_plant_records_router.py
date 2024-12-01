@@ -3,7 +3,7 @@ import json
 import tempfile
 from typing import Optional
 
-from fastapi import Depends, UploadFile, File, Query
+from fastapi import Depends, UploadFile, File, Query, Form
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 from loguru import logger
@@ -154,3 +154,55 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
 
         data = self.get_data(results)
         return data
+
+    @green_plant_records_router.put(
+        "/edit-record/{id}/",
+        name="edit_record",
+        description="Редактирование записи перечетной ведомости по ID",
+        tags=green_plant_records_tags,
+    )
+    async def edit(
+        self,
+        row_number: int = Form(...),
+        name: str = Form(...),
+        tree_count: int = Form(...),
+        shrub_count: int = Form(...),
+        width: str = Form(...),
+        height: str = Form(...),
+        condition_description: str = Form(...),
+        contributor: str = Form(...)
+    ):
+        async with AsyncSession(self.engine, autoflush=False, expire_on_commit=False) as session:
+            existing_record = await session.execute(
+                select(GreenPlantRecord).where(GreenPlantRecord.row_number == row_number)
+            )
+            existing_record = existing_record.scalars().first()
+
+            if not existing_record:
+                return {"error": "Record not found"}
+
+            existing_record.name = name
+            existing_record.tree_count = tree_count
+            existing_record.shrub_count = shrub_count
+            existing_record.width = width
+            existing_record.height = height
+            existing_record.condition_description = condition_description
+            existing_record.checked = True
+            existing_record.last_checked = datetime.datetime.utcnow()
+            existing_record.contributor = contributor
+
+            await session.commit()
+
+        data = {
+            'row_number': row_number,
+            'name': name,
+            'tree_count': tree_count,
+            'shrub_count': shrub_count,
+            'width': width,
+            'height': height,
+            'condition_description': condition_description,
+            'checked': True,
+            'last_checked': existing_record.last_checked,
+            'contributor': contributor
+        }
+        return self.get_data(data)
