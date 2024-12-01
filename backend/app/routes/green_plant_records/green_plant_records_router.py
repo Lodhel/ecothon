@@ -142,7 +142,8 @@ class GreenPlantRouter(MainRouterMIXIN, ManagerSQLAlchemy):
                     )
                     session.add(green_plant_record)
                     session.flush()
-                    data_tree.update(green_plant_record.id)
+
+                    data_tree['green_plant_record_id'] = green_plant_record.id
                     results.append(data_tree)
 
             if results:
